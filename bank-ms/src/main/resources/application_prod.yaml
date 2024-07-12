@@ -1,0 +1,15 @@
+spring:
+  config:
+    activate:
+      on-profile: "prod"
+
+
+contact:
+  email: "prod@server.com"
+  phones:
+    - 809-633-3625
+    - 809-633-5549
+
+build:
+  version: 1.0
+

@@ -1,6 +1,8 @@
 package com.juliluis.bankms.controller;
 
 import com.juliluis.bankms.dto.AccountDTO;
+import com.juliluis.bankms.dto.ContactInfoDTO;
+import com.juliluis.bankms.dto.CustomerInfoDTO;
 import com.juliluis.bankms.model.Account;
 import com.juliluis.bankms.model.Contact;
 import com.juliluis.bankms.model.Customer;
@@ -27,6 +29,12 @@ public class AccountController {
     @Value("${customer.url}")
     private String customerUrl;
 
+    @Autowired
+    private CustomerInfoDTO customerInfoDTO;
+
+    @Autowired
+    private ContactInfoDTO contactInfoDTO;
+
     @PostMapping
     public ResponseEntity<Account> create(@RequestBody CustomerRequest request) {
         System.out.println(customerUrl);
@@ -44,8 +52,14 @@ public class AccountController {
 
     @GetMapping(path = "{email}")
     public ResponseEntity<AccountDTO> getAccountNumber(@PathVariable(name = "email") String emailAddress) {
+        System.out.println("Configuration properties:: "+ customerInfoDTO.getUrl());
         AccountDTO accountDTO = accountService.getAccountNumber(emailAddress);
 
         return ResponseEntity.ok(accountDTO);
+    }
+
+    @GetMapping(path = "contact-info")
+    public ResponseEntity<ContactInfoDTO> contactInfo() {
+        return ResponseEntity.ok().body(contactInfoDTO);
     }
 }
