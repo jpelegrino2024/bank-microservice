@@ -8,7 +8,7 @@ spring:
     password: ${DB_PASS:123456}
     driver-class-name: com.mysql.cj.jdbc.Driver
   application:
-    name: bank-ms
+    name: bank
   jpa:
     show-sql: true
     hibernate:
@@ -17,23 +17,13 @@ spring:
       hibernate:
         format_sql: true
   config:
-    import:
-      - "application_qa.yaml"
-      - "application_prod_yaml"
-  profiles:
-    active:
-      - "qa"
+    import: "optional:configserver:http://localhost:8070/"
+
 customer:
   url: ${CUSTOMER_HOST:http://localhost:8000/api/customers/}
 
-build:
-  version: 1.0
-
-contact:
-  email: "dev@server.com"
-  phones:
-    - 809-549-3625
-    - 809-549-5549
-
-
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

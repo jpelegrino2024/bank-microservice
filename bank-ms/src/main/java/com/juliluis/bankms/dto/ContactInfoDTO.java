@@ -10,6 +10,7 @@ import java.util.Set;
 @Getter
 @Setter
 public class ContactInfoDTO {
+    private String environment;
     private String email;
     private Set<String> phones;
 }
