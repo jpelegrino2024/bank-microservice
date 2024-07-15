@@ -1,5 +1,6 @@
 package com.juliluis.bankms.controller;
 
+import com.juliluis.bankms.clients.CustomerClient;
 import com.juliluis.bankms.dto.AccountDTO;
 import com.juliluis.bankms.dto.ContactInfoDTO;
 import com.juliluis.bankms.dto.CustomerInfoDTO;
@@ -35,13 +36,16 @@ public class AccountController {
     @Autowired
     private ContactInfoDTO contactInfoDTO;
 
+    @Autowired
+    private CustomerClient customerClient;
+
     @PostMapping
     public ResponseEntity<Account> create(@RequestBody CustomerRequest request) {
-        System.out.println(customerUrl);
-        String uri = customerUrl + request.getCustomerId();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("invocationFrom", "RestTemplate");
-        ResponseEntity<Customer> response = restTemplate.getForEntity(uri, Customer.class);
+//        System.out.println(customerUrl);
+//        String uri = customerUrl + request.getCustomerId();
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("invocationFrom", "RestTemplate");
+        ResponseEntity<Customer> response = customerClient.getCustomer(request.getCustomerId());
         Customer customer = response.getBody();
         if (response.getStatusCode().value() != 200) {
             throw new RuntimeException("Sorry we could not find customer service");
