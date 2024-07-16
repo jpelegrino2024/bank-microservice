@@ -9,6 +9,8 @@ import com.juliluis.bankms.model.Contact;
 import com.juliluis.bankms.model.Customer;
 import com.juliluis.bankms.request.CustomerRequest;
 import com.juliluis.bankms.service.AccountService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +22,8 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 @RequestMapping("accounts")
 public class AccountController {
+
+    private Logger logger = LoggerFactory.getLogger(AccountController.class);
 
     @Autowired
     private RestTemplate restTemplate;
@@ -40,12 +44,11 @@ public class AccountController {
     private CustomerClient customerClient;
 
     @PostMapping
-    public ResponseEntity<Account> create(@RequestBody CustomerRequest request) {
-//        System.out.println(customerUrl);
-//        String uri = customerUrl + request.getCustomerId();
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.add("invocationFrom", "RestTemplate");
-        ResponseEntity<Customer> response = customerClient.getCustomer(request.getCustomerId());
+    public ResponseEntity<Account> create(
+            @RequestHeader("wiremoney-correlation-id") String correlationId,
+            @RequestBody CustomerRequest request) {
+        logger.debug("wiremoney-correlation-id found:{} ", correlationId);
+        ResponseEntity<Customer> response = customerClient.getCustomer(correlationId,request.getCustomerId());
         Customer customer = response.getBody();
         if (response.getStatusCode().value() != 200) {
             throw new RuntimeException("Sorry we could not find customer service");

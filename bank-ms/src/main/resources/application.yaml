@@ -60,3 +60,9 @@ info:
     name: "Bank"
     description: "Bank system to process customers request"
     version: "1.0.0"
+
+logging:
+  level:
+    com:
+      juliluis:
+        bankms: DEBUG
