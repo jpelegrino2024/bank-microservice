@@ -20,6 +20,25 @@ spring:
     import: ${CONFIG_HOST:optional:configserver:http://localhost:8070/}
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:default}
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+    function:
+      definition: updateComunication
+    stream:
+      bindings:
+        sendComunication-out-0:
+          destination: send-comunication
+        updateComunication-in-0:
+          destination: comunication-sent
+          group: ${spring.application.name}
+  rabbitmq:
+    host: ${RABBIT_HOST:localhost}
+    port: 5672
+    username: guest
+    password: guest
+    connection-timeout: 10s
 
 customer:
   url: ${CUSTOMER_HOST:http://localhost:8000/api/customers/}
@@ -66,3 +85,11 @@ logging:
     com:
       juliluis:
         bankms: DEBUG
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      slidingWindowSize: 10
+      permittedNumberOfCallsInHalfOpenState: 2
+      failureRateThreshold: 50
+      waitDurationInOpenState: 10000
